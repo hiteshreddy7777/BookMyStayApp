@@ -1,36 +1,18 @@
-import java.util.Scanner;
-
 public class BookMyStayApp {
 
     public static void main(String[] args) {
 
-        System.out.println("Booking Validation");
-
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("Booking Cancellation");
 
         RoomInventory inventory = new RoomInventory();
-        ReservationValidator validator = new ReservationValidator();
-        BookingRequestQueue bookingQueue = new BookingRequestQueue();
+        CancellationService cancellationService = new CancellationService();
 
-        try {
-            System.out.print("Enter guest name: ");
-            String guestName = scanner.nextLine();
+        cancellationService.registerBooking("Single-1", "Single");
 
-            System.out.print("Enter room type (Single/Double/Suite): ");
-            String roomType = scanner.nextLine();
+        cancellationService.cancelBooking("Single-1", inventory);
 
-            validator.validate(guestName, roomType, inventory);
+        cancellationService.showRollbackHistory();
 
-            Reservation reservation = new Reservation(guestName, roomType);
-            bookingQueue.addRequest(reservation);
-
-            System.out.println("Booking request added successfully for Guest: " + guestName);
-
-        } catch (InvalidBookingException e) {
-            System.out.println("Booking failed: " + e.getMessage());
-
-        } finally {
-            scanner.close();
-        }
+        System.out.println("\nUpdated Single Room Availability: " + inventory.getRoomAvailability().get("Single"));
     }
 }
